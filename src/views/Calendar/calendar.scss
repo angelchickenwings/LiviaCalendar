@@ -15,7 +15,7 @@ body {
     flex-direction: row;
     align-items: flex-start;
     justify-content: space-around;
-    width: 80%;
+    width: 99%;
     margin: 0 auto;
     gap: 20px;
     overflow-x: auto;
@@ -36,7 +36,6 @@ body {
     aspect-ratio: 1/1;
     padding-top: 30px;
     position: relative;
-    margin: 0 auto;
     display: flex; 
     justify-content: space-between;
 }
@@ -46,7 +45,6 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
     height: 100%;
 }
 .calendar-overlay {
@@ -58,21 +56,35 @@ body {
 
 .navigation {
     position: absolute;
-    width: 20%;
-    height: 70px;
+    width: 15%;
+    height: 15%;
     cursor: pointer;
-    background: transparent; /* Invisible */
+    background: transparent;
     z-index: 2;
 }
 
-.navigation.previous {
-    top: 25px;
-    left: 0; 
+.navigation.previous-top {
+    top: 6%;
+    left: 2%; 
+    border-bottom-right-radius: 60%;
 }
 
-.navigation.next {
-    top: 10px;
-    right: 0; 
+.navigation.next-top {
+    top: 4%;
+    right: 3%; 
+    border-bottom-left-radius: 60%;
+}
+
+.navigation.previous-bottom {
+    top: 55%;
+    left: 1%; 
+    border-top-right-radius: 60%;
+}
+
+.navigation.next-bottom {
+    top: 55%;
+    right: 1%; 
+    border-top-left-radius: 60%;
 }
 
 .navigation:hover {
@@ -165,7 +177,7 @@ body {
     z-index: 2;
     width: 100%;
     max-width: 900px;
-    margin-top: 50px; 
+    margin-top: 70px; 
 }
 
 .days-part-left,
@@ -290,6 +302,26 @@ body {
     width: 100%;
 }
 
-.notes-lines{
+.notes-lines {
     width: 100%;
+    position: relative;
+    z-index: 0; 
 }
+
+.note-textarea {
+    position: absolute; 
+    top: -5px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2); 
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    z-index: 20;
+    font-size: x-large;
+}
+
+.day-note{
+    display: inline-block;
+}
+

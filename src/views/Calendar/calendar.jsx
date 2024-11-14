@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Day from "../Day";
 import './calendar.scss';
 import '../../components/commons/CrayonLine';
@@ -8,11 +8,17 @@ function Calendar() {
     const [month, setMonth] = useState('January');
     const [year, setYear] = useState(new Date().getFullYear());
     const daysInMonth = new Date(year, new Date(`${month} 1`).getMonth() + 1, 0).getDate();
+    const [selectedDay, setSelectedDay] = useState(1);
+    const [note, setNote] = useState(localStorage.getItem(`note-${selectedDay}-${month}-${year}`));
 
     const firstHalf = [...Array(Math.min(12, daysInMonth))].map((_, index) => index + 1);
     const secondHalf = [...Array(daysInMonth - firstHalf.length)].map((_, index) => index + firstHalf.length + 1);
 
     const monthImage = `/images/months/${month.slice(0, 3).toLowerCase()}.png`;
+
+    useEffect(() => {
+        setNote(localStorage.getItem(`note-${selectedDay}-${month}-${year}`));
+    }, [selectedDay, month, year]);
 
     const handleMonthChange = (direction) => {
         const monthNames = ["January", "February", "March", "April", "May", "June", 
@@ -30,55 +36,86 @@ function Calendar() {
                 setYear(year + 1);
             }
         }
+        setSelectedDay(1);
+    };
+    
+    const handleNoteChange = (newNote) => {
+        // si la nota es null, se muestra un string vacío
+        if (newNote === null) {
+            newNote = "";
+        }
+        setNote(newNote);
+        localStorage.setItem(`note-${selectedDay}-${month}-${year}`, newNote);
     };
 
     return (
+        <>
         <div className="calendar-notes-container">
             <div className="notes-section">
                 <p>NOTES:</p>
+                <div className="day-note">
+                    <p>{selectedDay} {month} {year}</p>
+                </div>
                 <div className="notes-lines">
                     <div className="other-pages-lines">
                         <CrayonLine lineCount={10} />
+                        {selectedDay && (
+                            <>
+                                
+                                <textarea
+                                    value={note || ""}
+                                    onChange={(e) => handleNoteChange(e.target.value)}
+                                    placeholder="Write a note..."
+                                    className="note-textarea"
+                                />
+                             </>
+                         )}
                     </div>
                 </div>
             </div>
             <div className="calendar">
-                <div className="calendar-container">                    
-                    <div className="calendar-overlay">
-                        <img src="/images/mushrooms-layers/MushroomLayer1.png" 
+                <div className="calendar-container">
+                    <img src="/images/mushrooms-layers/MushroomLayer1.png" 
                         alt="mushroom layer" 
                         className="mushroom-layer1" 
-                        />
-                        <img src="/images/mushrooms-layers/MushroomLayer2.png"
+                    />
+                    <img src="/images/mushrooms-layers/MushroomLayer2.png"
                         alt="mushroom layer"
                         className="mushroom-layer2"
-                        />
-                        <img src="/images/mushrooms-layers/MushroomLayer8.png"
+                    />
+                    <img src="/images/mushrooms-layers/MushroomLayer8.png"
                         alt="mushroom layer"
                         className="mushroom-layer8" 
-                        />
-                        <img src="/images/mushrooms-layers/MushroomLayer3.png"
+                    />
+                    <img src="/images/mushrooms-layers/MushroomLayer3.png"
                         alt="mushroom layer"
                         className="mushroom-layer3" 
-                        />
-                        <img 
-                            src="/images/calendar-frame.png" 
-                            alt="calendar frame" 
-                            className="frame" 
-                        />
-                        <img 
-                            src="/images/calendar.png" 
-                            alt="calendar" 
-                            className="calendar-image" 
-                        />
-                    </div>
+                    />
+                    <img 
+                        src="/images/calendar-frame.png" 
+                        alt="calendar frame" 
+                        className="frame" 
+                    />
+                    <img 
+                        src="/images/calendar.png" 
+                        alt="calendar" 
+                        className="calendar-image" 
+                    />
 
                     <div 
-                        className="navigation previous" 
+                        className="navigation previous-top" 
                         onClick={() => handleMonthChange('previous')}
                     />
                     <div 
-                        className="navigation next" 
+                        className="navigation previous-bottom" 
+                        onClick={() => handleMonthChange('previous')}
+                    />
+                    <div 
+                        className="navigation next-top" 
+                        onClick={() => handleMonthChange('next')}
+                    />
+                    <div 
+                        className="navigation next-bottom" 
                         onClick={() => handleMonthChange('next')}
                     />
 
@@ -93,15 +130,19 @@ function Calendar() {
                     <div className="days-container">
                         <div className="days-part-left">
                             {firstHalf.map(day => (
-                                <div key={day} className="day-container">
-                                    <Day dayNumber={day} />
+                                <div key={day} className="day-container" onClick={() => { 
+                                    setSelectedDay(day); console.log(day); 
+                                }}>
+                                    <Day dayNumber={day} month={month} year={year} />
                                 </div>
                             ))}
                         </div>
                         <div className="days-part-right">
                             {secondHalf.map(day => (
-                                <div key={day} className="day-container">
-                                    <Day dayNumber={day} />
+                                <div key={day} className="day-container" onClick={() => { 
+                                    setSelectedDay(day); 
+                                }}>
+                                    <Day  dayNumber={day} month={month} year={year} />
                                 </div>
                             ))}
                         </div>
@@ -114,7 +155,15 @@ function Calendar() {
                         <CrayonLine lineCount={10} />
                     </div>
             </div>
+
+            
         </div>
+        {/* crear boton para borra localStorage y reload */}
+        <div className="calendar-footer">
+            <button onClick={() => { localStorage.clear(); window.location.reload(); }}>Clear localStorage and reload
+            </button>
+        </div>
+        </>
     );
 }
 
