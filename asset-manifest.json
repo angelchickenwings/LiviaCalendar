@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/LiviaCalendar/static/css/main.d5663fae.css",
+    "main.js": "/LiviaCalendar/static/js/main.5d79de00.js",
+    "index.html": "/LiviaCalendar/index.html",
+    "main.d5663fae.css.map": "/LiviaCalendar/static/css/main.d5663fae.css.map",
+    "main.5d79de00.js.map": "/LiviaCalendar/static/js/main.5d79de00.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d5663fae.css",
+    "static/js/main.5d79de00.js"
+  ]
+}
